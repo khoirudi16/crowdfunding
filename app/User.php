@@ -6,12 +6,11 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
     use Notifiable;
-
-
 
     /**
      * The "booting" function of model
@@ -26,6 +25,24 @@ class User extends Authenticatable
                 $model->{$model->getKeyName()} = (string) Str::uuid();
             }
         });
+    }
+
+    public function isAdmin()
+    {
+        $getIdAdmin = DB::table('roles')->where('rolename', 'Administrator')->first()->roleid_pk;
+
+        if ($this->roleid_fk == $getIdAdmin) {
+            return true;
+        }
+        return false;
+    }
+
+    public function checkMailVerification()
+    {
+        if ($this->email_verified_at == null) {
+            return false;
+        }
+        return true;
     }
 
     /**

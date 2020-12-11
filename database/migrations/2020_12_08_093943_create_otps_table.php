@@ -14,10 +14,11 @@ class CreateOtpsTable extends Migration
     public function up()
     {
         Schema::create('otps', function (Blueprint $table) {
-            $table->bigIncrements('otpid_pk');
+            $table->uuid('otpid_pk')->primary();
+            $table->integer('otp');
             $table->uuid('userid_fk')->unique();
-            $table->string('otpkey');
-            $table->timestamp('expired_date');
+            $table->foreign('userid_fk')->references('userid_pk')->on('users')->onDelete('cascade');
+            $table->dateTime('valid_until');
             $table->timestamps();
         });
     }

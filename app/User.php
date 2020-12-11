@@ -7,25 +7,26 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use App\Traits\Uuid;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable, Uuid;
 
     /**
      * The "booting" function of model
      *
      * @return void
      */
-    protected static function boot()
-    {
-        parent::boot();
-        static::creating(function ($model) {
-            if (!$model->getKey()) {
-                $model->{$model->getKeyName()} = (string) Str::uuid();
-            }
-        });
-    }
+    // protected static function boot()
+    // {
+    //     parent::boot();
+    //     static::creating(function ($model) {
+    //         if (!$model->getKey()) {
+    //             $model->{$model->getKeyName()} = (string) Str::uuid();
+    //         }
+    //     });
+    // }
 
     public function isAdmin()
     {
@@ -50,20 +51,20 @@ class User extends Authenticatable
      *
      * @return bool
      */
-    public function getIncrementing()
-    {
-        return false;
-    }
+    // public function getIncrementing()
+    // {
+    //     return false;
+    // }
 
     /**
      * Get the auto-incrementing key type.
      *
      * @return string
      */
-    public function getKeyType()
-    {
-        return 'string';
-    }
+    // public function getKeyType()
+    // {
+    //     return 'string';
+    // }
 
     protected $primaryKey = 'userid_pk';
     /**

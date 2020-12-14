@@ -22,11 +22,18 @@ class User extends Authenticatable
     // {
     //     parent::boot();
     //     static::creating(function ($model) {
-    //         if (!$model->getKey()) {
-    //             $model->{$model->getKeyName()} = (string) Str::uuid();
-    //         }
+    //         $model->roleid_fk = $model->get_user_role_id();
+    //         // if (!$model->getKey()) {
+    //         //     $model->{$model->getKeyName()} = (string) Str::uuid();
+    //         // }
     //     });
     // }
+
+    public function get_user_role_id()
+    {
+        $role = \App\Role::where('rolename', 'user')->first();
+        return $role->roleid_pk;
+    }
 
     public function isAdmin()
     {
@@ -67,6 +74,7 @@ class User extends Authenticatable
     // }
 
     protected $primaryKey = 'userid_pk';
+    protected $primary = 'userid_pk';
     /**
      * The attributes that are mass assignable.
      *

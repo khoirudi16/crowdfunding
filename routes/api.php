@@ -14,6 +14,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::namespace('ServiceAuth')->group(function () {
+    Route::post('/register', 'RegisterController');
+    Route::post('/verification', 'VerificationController');
+    Route::post('/regenerate-otp', 'RegenerateOtpController');
+    Route::post('/password-update', 'UpdatePasswordOtpController');
+});
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });

@@ -19,7 +19,9 @@ Route::namespace('ServiceAuth')->group(function () {
     Route::post('/verification', 'VerificationController');
     Route::post('/regenerate-otp', 'RegenerateOtpController');
     Route::post('/password-update', 'UpdatePasswordOtpController');
+    Route::post('/login', 'LoginController');
 });
+
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();

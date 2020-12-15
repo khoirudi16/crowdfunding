@@ -13,4 +13,10 @@ class Role extends Model
     protected $guarded = [];
 
     protected $primaryKey = 'roleid_pk';
+
+    public function get_user_role_id()
+    {
+        $role = \App\Role::where('rolename', 'user')->get()->first();
+        return $role->roleid_pk;
+    }
 }

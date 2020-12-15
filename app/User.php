@@ -30,50 +30,6 @@ class User extends Authenticatable implements JWTSubject
     //     });
     // }
 
-    public function get_user_role_id()
-    {
-        $role = \App\Role::where('rolename', 'user')->first();
-        return $role->roleid_pk;
-    }
-
-    public function isAdmin()
-    {
-        $getIdAdmin = DB::table('roles')->where('rolename', 'Administrator')->first()->roleid_pk;
-
-        if ($this->roleid_fk == $getIdAdmin) {
-            return true;
-        }
-        return false;
-    }
-
-    public function checkMailVerification()
-    {
-        if ($this->email_verified_at == null) {
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * Get the value indicating whether the IDs are incrementing.
-     *
-     * @return bool
-     */
-    // public function getIncrementing()
-    // {
-    //     return false;
-    // }
-
-    /**
-     * Get the auto-incrementing key type.
-     *
-     * @return string
-     */
-    // public function getKeyType()
-    // {
-    //     return 'string';
-    // }
-
     protected $primaryKey = 'userid_pk';
     protected $primary = 'userid_pk';
     /**
@@ -113,4 +69,42 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
+
+    public function isAdmin()
+    {
+        $getIdAdmin = DB::table('roles')->where('rolename', 'Administrator')->first()->roleid_pk;
+
+        if ($this->roleid_fk == $getIdAdmin) {
+            return true;
+        }
+        return false;
+    }
+
+    public function checkMailVerification()
+    {
+        if ($this->email_verified_at == null) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Get the value indicating whether the IDs are incrementing.
+     *
+     * @return bool
+     */
+    // public function getIncrementing()
+    // {
+    //     return false;
+    // }
+
+    /**
+     * Get the auto-incrementing key type.
+     *
+     * @return string
+     */
+    // public function getKeyType()
+    // {
+    //     return 'string';
+    // }
 }

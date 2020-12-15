@@ -5,11 +5,19 @@ namespace App\Http\Controllers\ServiceAuth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\RegisteredMail;
 use \App\Otp;
 use Carbon\Carbon;
 
 class RegenerateOtpController extends Controller
 {
+    protected $otp_instance;
+
+    public function __construct()
+    {
+        $this->otp_instance = new Otp();
+    }
     /**
      * Handle the incoming request.
      *
@@ -31,12 +39,16 @@ class RegenerateOtpController extends Controller
                 'data' => $request->email
             ], 404);
         } else {
+            $otp = $this->otp_instance->generate_otp();
+
             DB::table('otps')->where('userid_fk', $user->userid_pk)->update([
-                'otp' => $this->_generate_otp(),
+                'otp' => $otp,
                 'valid_until' => Carbon::now()->addMinutes(5),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ]);
+
+            Mail::to($user->email)->send(new RegisteredMail($otp, $user->name, $user->email));
 
             return response()->json([
                 'response_code' => "00",
@@ -49,18 +61,5 @@ class RegenerateOtpController extends Controller
     {
         $user = DB::table('users')->where('email', $email)->get()->first();
         return $user;
-    }
-
-    private function _generate_otp()
-    {
-        $generator = "1357902468";
-        $result = "";
-
-        for ($i = 1; $i <= 6; $i++) {
-            $result .= substr($generator, (rand() % (strlen($generator))), 1);
-        }
-
-        // Return result 
-        return $result;
     }
 }

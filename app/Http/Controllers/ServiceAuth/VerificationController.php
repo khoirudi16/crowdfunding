@@ -6,10 +6,18 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\User;
+use App\Otp;
 
 
 class VerificationController extends Controller
 {
+    protected $otp_instance;
+
+    public function __construct()
+    {
+        $this->otp_instance = new Otp();
+    }
+
     /**
      * Handle the incoming request.
      *
@@ -22,7 +30,7 @@ class VerificationController extends Controller
             'otp' => 'required',
         ]);
 
-        $object_otp = $this->_get_otp_data($request->otp);
+        $object_otp = $this->otp_instance->get_otp_data($request->otp);
 
         if ($object_otp == null) {
             return response()->json([
@@ -50,11 +58,5 @@ class VerificationController extends Controller
                 ], 201);
             }
         }
-    }
-
-    private function _get_otp_data($otp)
-    {
-        $object_otp = DB::table('otps')->where('otp', $otp)->get()->first();
-        return $object_otp;
     }
 }

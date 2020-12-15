@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers\ServiceAuth;
 
+use App\Events\UserRegisteredEvent;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
-use App\Mail\RegisteredMail;
 use \App\Otp;
 use Carbon\Carbon;
 
@@ -48,7 +47,7 @@ class RegenerateOtpController extends Controller
                 'updated_at' => Carbon::now()
             ]);
 
-            Mail::to($user->email)->send(new RegisteredMail($otp, $user->name, $user->email));
+            event(new UserRegisteredEvent($otp, $user->name, $user->email));
 
             return response()->json([
                 'response_code' => "00",

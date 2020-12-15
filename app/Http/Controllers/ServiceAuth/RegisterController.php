@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\ServiceAuth;
 
+use App\Events\UserRegisteredEvent;
 use App\Http\Controllers\Controller;
-use App\Mail\RegisteredMail;
 use App\Otp;
 use App\Role;
 use Carbon\Carbon;
@@ -11,7 +11,6 @@ use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
 
 class RegisterController extends Controller
 {
@@ -62,7 +61,7 @@ class RegisterController extends Controller
             $otp->created_at = now();
             $otp->save();
 
-            Mail::to($user->email)->send(new RegisteredMail($get_otp, $user->name, $user->email));
+            event(new UserRegisteredEvent($get_otp, $user->name, $user->email));
         });
 
         return response()->json([

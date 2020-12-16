@@ -1,17 +1,23 @@
 <?php
 
-namespace App\Listeners;
+namespace App\Jobs;
 
-use App\Events\UserRegisteredEvent;
+use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
+use App\Events\UserRegisteredEvent;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\RegisteredMail;
 
+
 class SendEmailNotificationUserRegistered implements ShouldQueue
 {
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
     /**
-     * Create the event listener.
+     * Create a new job instance.
      *
      * @return void
      */
@@ -21,9 +27,8 @@ class SendEmailNotificationUserRegistered implements ShouldQueue
     }
 
     /**
-     * Handle the event.
+     * Execute the job.
      *
-     * @param  UserRegisteredEvent  $event
      * @return void
      */
     public function handle(UserRegisteredEvent $event)

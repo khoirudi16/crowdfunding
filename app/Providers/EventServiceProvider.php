@@ -20,7 +20,8 @@ class EventServiceProvider extends ServiceProvider
         ],
 
         'App\Events\UserRegisteredEvent' => [
-            'App\Listeners\SendEmailNotificationUserRegistered',
+            // 'App\Listeners\SendEmailNotificationUserRegistered',
+            'App\Jobs\SendEmailNotificationUserRegistered',
         ]
     ];
 
